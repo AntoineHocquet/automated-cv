@@ -1,0 +1,14 @@
+{
+  "name": "Antoine Hocquet",
+  "personal_data": {
+    "email": "antoine@example.com",
+    "phone": "+33 6 12 34 56 78",
+    "address": "Berlin, Germany"
+  },
+  "hard_skills": ["Python", "Docker", "Machine Learning", "FreeFEM++"],
+  "soft_skills": ["Curiosity", "Analytical Thinking", "Communication"],
+  "portfolio_links": ["https://github.com/antoine", "https://antoine.dev"],
+  "education": ["PhD in Applied Mathematics (École Polytechnique)", "MSc in Analysis (ENS Cachan)"],
+  "languages_spoken": ["French", "English", "German (B2)"],
+  "miscellaneous": "Enjoys astrophysics and plays guitar"
+}
