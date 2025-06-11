@@ -111,12 +111,18 @@ if generate:
         compile_tex_to_pdf(tex_path)
 
         pdf_path = tex_path.replace(".tex", ".pdf")
+        st.success("✅ LaTeX letter generated!")
+
+        # Offer download of .tex file
+        with open(tex_path, "rb") as f_tex:
+            st.download_button("📄 Download LaTeX (.tex)", f_tex, file_name=os.path.basename(tex_path), mime="text/plain")
+
+        # Offer download of .pdf only if available
         if os.path.exists(pdf_path):
-            with open(pdf_path, "rb") as f:
-                st.success("✅ PDF successfully generated!")
-                st.download_button("📥 Download PDF", f, file_name=os.path.basename(pdf_path), mime="application/pdf")
+            with open(pdf_path, "rb") as f_pdf:
+                st.download_button("📥 Download PDF", f_pdf, file_name=os.path.basename(pdf_path), mime="application/pdf")
         else:
-            st.error("❌ PDF generation failed.")
+            st.info("ℹ️ PDF compilation is not available on Streamlit Cloud. You can compile the .tex file locally using pdflatex.")
     else:
         st.warning("⚠️ Please select a job ad before generating the PDF.")
 

@@ -1,0 +1,7 @@
+[server]
+headless = true
+enableCORS = false
+
+[runner]
+# Force Streamlit to use the correct Python path
+magicEnabled = false
