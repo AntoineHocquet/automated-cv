@@ -1,12 +1,15 @@
 # frontend/app.py
 
+import sys
+import os
+sys.path.append(os.path.abspath("."))
+
 import streamlit as st
 from backend.models.candidate import Candidate
 from backend.models.job import Job
 from backend.models.letter import LetterSpec
 from backend.tex_generator import render_cover_letter_tex
 from backend.compile_tex import compile_tex_to_pdf
-import os
 import json
 import glob
 
