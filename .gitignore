@@ -9,6 +9,11 @@ __pycache__/
 *.egg-info/
 *.eggs/
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
 # Ignore environment variables file
 .env
 
@@ -20,3 +25,13 @@ __pycache__/
 
 # Ignore VS Code settings (optional)
 .vscode/
+
+# Local data
+data/profiles/params.json
+
+# Output files
+output/cover_letters/*.pdf
+output/cover_letters/*.tex
+
+# OS metadata
+.DS_Store

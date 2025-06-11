@@ -1,16 +1,25 @@
-\documentclass[a4paper,10pt]{letter}
+\documentclass[a4paper,{{ size }}]{letter}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
-\geometry{margin=2.5cm}
+\geometry{margin=3.5cm}
+
+{% if font == 'times' %}
+\usepackage{mathptmx}
+{% elif font == 'fourier' %}
+\usepackage{fourier}
+{% elif font == 'euler' %}
+\usepackage{eulervm}
+{% endif %}
+
 \begin{document}
 
 \begin{letter}{}
-\opening{Dear Hiring Team,}
+\opening{ {{ introduction }} }
 
 {{ body }}
 
-\closing{Sincerely,\\{{ name }}}
+\closing{ {{ closing }} }
 
 \end{letter}
 \end{document}

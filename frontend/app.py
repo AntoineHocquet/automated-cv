@@ -1,13 +1,14 @@
+# frontend/app.py
+
 import streamlit as st
 from backend.models.candidate import Candidate
 from backend.models.job import Job
+from backend.models.letter import LetterSpec
 from backend.tex_generator import render_cover_letter_tex
 from backend.compile_tex import compile_tex_to_pdf
 import os
 import json
 import glob
-
-
 
 # --- PAGE CONFIG ---
 DATA_PATH = "data/profiles"
@@ -15,7 +16,6 @@ os.makedirs(DATA_PATH, exist_ok=True)
 PROFILE_FILE = os.path.join(DATA_PATH, "params.json")
 
 st.set_page_config(page_title="Candidate Profile Setup", page_icon="🧠")
-
 st.title("🧠 Candidate Profile Setup")
 
 # Load existing data if available
@@ -58,28 +58,53 @@ with st.form("candidate_form"):
 
     misc = st.text_area("Miscellaneous Notes", value=default_data["miscellaneous"])
 
+    # --- Customization Fields ---
+    st.divider()
+    st.header("🧠 Customize Your Cover Letter")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        size = st.selectbox("Font size", ["9pt", "10pt", "11pt", "12pt"], index=1)
+        font = st.selectbox("Font family", ["default", "times", "fourier", "euler"], index=0)
+
+    with col2:
+        style = st.selectbox("Writing style", ["enthusiastic", "confident", "factual", "cold"], index=1)
+        length = st.selectbox("Length", ["succint", "normal", "thorough"], index=1)
+        paragraphs = st.slider("Number of paragraphs", min_value=1, max_value=6, value=3)
+        idea = st.text_input("Idea to convey (optional)", value="")
+
     submitted = st.form_submit_button("💾 Save Profile")
 
 # --- Generate Cover Letter ---
 st.divider()
 st.header("📄 Generate Cover Letter PDF")
 
-# Load job ad list from ads/
 job_files = sorted(glob.glob("ads/*.txt"))
 job_file = st.selectbox("Select a job ad", job_files)
-
 generate = st.button("🚀 Generate Cover Letter (PDF)")
 
-# --- Generate PDF ---
 if generate:
     if job_file:
-        candidate = Candidate.from_json("data/profiles/params.json")
+        candidate = Candidate.from_json(PROFILE_FILE)
         job_text = open(job_file).read()
         job = Job(job_text, source=job_file)
         job.populate_from_llm()
 
+        spec = LetterSpec(
+            introduction="",  # to be filled by LLM
+            body="",
+            closing="",
+            size=size,
+            font=font,
+            style=style,
+            length=length,
+            paragraphs=paragraphs,
+            idea=idea
+        )
+
         tex_path = "output/cover_letters/letter_streamlit.tex"
-        render_cover_letter_tex(candidate, job, output_path=tex_path)
+        render_cover_letter_tex(candidate, job, spec, output_path=tex_path)
         compile_tex_to_pdf(tex_path)
 
         pdf_path = tex_path.replace(".tex", ".pdf")
@@ -91,7 +116,6 @@ if generate:
             st.error("❌ PDF generation failed.")
     else:
         st.warning("⚠️ Please select a job ad before generating the PDF.")
-
 
 if submitted:
     candidate = Candidate(

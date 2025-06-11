@@ -5,127 +5,52 @@ Generate custom, LLM-powered LaTeX cover letters based on structured candidate p
 
 ---
 
-## 🚧 Project Status
+## ✨ Automated Cover Letter Generator
 
-🧠 **Under active development**
+Create personalized, LLM-powered LaTeX cover letters in your browser.  
+Customize tone, font, formatting — and download a polished PDF in seconds.
 
-✅ Current features:
-- Streamlit UI for creating a `Candidate` profile
-- LLM-based job ad analysis and personalized letter body generation
-- Jinja2 templating for `.tex` cover letter rendering
-- Docker-based PDF compilation with `pdflatex`
-- Manual test scripts and Pytest support
-
-🔜 Coming soon:
-- CV integration with dynamic `.tex` templates
-- Full GitHub Actions automation
-- One-click archive to Google Drive or cloud export
+🌍 **[Try the App Here](https://your-username.streamlit.app)**
 
 ---
 
-## 🚀 Getting Started
+## 🚧 Status: Version 1 Released
 
-### 1. Clone the repository
+✅ Features:
+- Streamlit UI for editing your profile
+- Upload/select job ads (`.txt`)
+- Customize letter style, font, length
+- Download PDF generated via LaTeX + Docker
+
+🔜 Coming Soon:
+- CV generation and templating
+- Google Drive export
+- Translations via Gemini API
+
+---
+
+## 🛡️ Privacy Notice
+
+This app does **not track or store** user profiles.  
+Your personal data (`params.json`) is stored locally in your browser/session and is **not pushed to GitHub**.
+
+Only job ads in `ads/*.txt` are version-controlled.
+
+---
+
+## 🧪 Run Locally
 
 ```bash
 git clone https://github.com/AntoineHocquet/automated-cv.git
 cd automated-cv
-```
-
-### 2. Set up the environment
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-### 3. Set your API key
-
-Create a `.env` file:
-```env
-MISTRAL_API_KEY=sk-...
-```
-
-Or export manually:
-```bash
-export MISTRAL_API_KEY=sk-...
-```
-
----
-
-## 🖥️ Using the App (Streamlit)
-
-```bash
+make reset
 make run
 ```
 
-Features:
-- Edit your profile via a clean UI
-- Select a job ad from `ads/`
-- Generate `.tex` + `.pdf` in one click
-- Download the final letter from the browser
+### 🔐 Mistral API Key (required for local use)
 
----
+To generate real letters using LLMs, you need a free Mistral API key:  
+👉 [https://console.mistral.ai](https://console.mistral.ai)
 
-## 🧪 Manual Test
-
-You can also test everything via CLI:
-
-```bash
-python manual_letter_test.py
-```
-
----
-
-## 🐳 Docker-Based Compilation
-
-You need Docker installed to compile `.tex` files into PDFs using:
-
-```bash
-ghcr.io/xu-cheng/texlive-full
-```
-
-This ensures consistency across environments (local, GitHub Actions, etc.).
-
----
-
-## 📂 Project Structure
-
-```
-.
-├── backend/
-│   ├── models/           # Candidate and Job classes
-│   ├── tex_generator.py  # Letter rendering logic
-│   ├── compile_tex.py    # PDF compilation via Docker
-│   └── llm_config.py     # LLM client (Mistral)
-│
-├── frontend/
-│   └── app.py            # Streamlit user interface
-│
-├── ads/                  # Job ads as .txt files
-├── data/profiles/        # Saved candidate profiles (JSON)
-├── output/cover_letters/ # Generated .tex and .pdf files
-├── templates/            # Jinja2 LaTeX template(s)
-├── tests/                # Pytest-based testing
-├── requirements.txt
-├── Dockerfile.pdflatex
-├── setup.py
-├── Makefile
-└── README.md
-```
-
----
-
-## 🤝 Contributions
-
-All contributions welcome. Features in progress:
-- CV integration
-- Multi-template support
-- REST API or CLI generation mode
-
----
-
-## 📄 License
-
-MIT — free to use and modify.
+Then set it in a `.env` file located at the root, with the syntax
+`MISTRAL_API_KEY=...`
