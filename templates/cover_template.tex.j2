@@ -1,8 +1,14 @@
-\documentclass[a4paper,{{ size }}]{letter}
+\documentclass[{{ size }}]{letter}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{geometry}
-\geometry{margin=3.5cm}
+\usepackage[english]{babel}
+\usepackage{textcomp}
+\usepackage{graphicx}
+\pagestyle{empty}
+\usepackage[scale=0.75]{geometry}
+\setlength{\parindent}{0pt}
+\addtolength{\parskip}{6pt}
+\renewcommand{\ttdefault}{pcr}
 
 {% if font == 'times' %}
 \usepackage{mathptmx}
@@ -13,8 +19,22 @@
 {% endif %}
 
 \begin{document}
+\begin{letter}{ \itshape Object: Application for the {{ title }} role }
+%\sffamily
+\hfill
+\begin{flushleft}
+    {\bfseries {{ name }} }\\[.35ex]
+    \small\itshape
+    {{ address }}\\
+    Personal number: {{ phone }}\\
+    {{ email }}
+\end{flushleft}
 
-\begin{letter}{}
+\hfill
+\begin{flushright}
+    \itshape {{ company_name }} \\
+\end{flushright}
+
 \opening{ {{ introduction }} }
 
 {{ body }}

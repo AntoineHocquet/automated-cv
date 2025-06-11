@@ -59,7 +59,9 @@ def render_cover_letter_tex(
     spec: LetterSpec,
     output_path: str = "output/cover_letters/letter.tex"
 ):
-    """Generate .tex cover letter using structured LLM output and a Jinja2 LaTeX template."""
+    """
+    Generate .tex cover letter using structured LLM output and a Jinja2 LaTeX template.
+    """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     # Pass spec into generation
@@ -76,12 +78,18 @@ def render_cover_letter_tex(
 
     tex_output = template.render(
         name=candidate.name,
+        address=candidate.personal_data.get("address", ""),
+        phone=candidate.personal_data.get("phone", ""),
+        email=candidate.personal_data.get("email", ""),
+        company_name=job.company_name or "Company",  # default fallback
+        title=job.title or "Open",
         introduction=filled_spec.introduction.strip(),
         body=filled_spec.body.strip(),
         closing=filled_spec.closing.strip(),
         size=spec.size,
         font=spec.font
     )
+
 
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(tex_output)

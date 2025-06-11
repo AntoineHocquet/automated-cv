@@ -68,7 +68,7 @@ with st.form("candidate_form"):
     col1, col2 = st.columns(2)
 
     with col1:
-        size = st.selectbox("Font size", ["9pt", "10pt", "11pt", "12pt"], index=1)
+        size = st.selectbox("Font size", ["9pt", "10pt", "11pt", "12pt"], index=3)
         font = st.selectbox("Font family", ["default", "times", "fourier", "euler"], index=0)
 
     with col2:
