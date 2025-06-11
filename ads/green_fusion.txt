@@ -1,0 +1,74 @@
+ Green Fusion
+Data Scientist in Energy Tech Start Up - hybrid Berlin based (f/m/d)
+Berlin, Berlin, Germany · 1 day ago · Over 100 people clicked apply
+Your AI-powered job assessment
+
+People you can reach out to
+
+    Nina profile photo
+
+Nina profile photo
+Nina Germanus
+· 3rd
+Co-CEO | Founder @ Green Fusion
+Company alum from Technische Universität Berlin
+About the job
+
+Digitalization and energy transition in one sentence? That’s what we do at Green Fusion! Our software optimizes heating systems in the real estate sector, helping to combat climate change through digitalization and automation. We reduce emissions and energy consumption, actively advancing the energy transition.
+
+As a Data Scientist, you’ll support our Energy Optimization Team by developing production-ready algorithms that optimize heating system operations. With a basic understanding of heating systems and strong expertise in control technology, you’ll bring essential insights to help us develop effective tools for energy optimization.
+
+Tasks
+
+    Data Analysis: Clean and analyze data to identify patterns and trends, uncovering insights that drive our solutions.
+    Statistical Analysis: Use statistical techniques to interpret data, ensuring the reliability and accuracy of your findings.
+    Data Science: Create data models to predict heating system behavior and patterns using advanced analytics techniques and machine learning.
+    Algorithm Development: Create production-ready algorithms and data pipelines to optimize energy system components, reducing CO2 emissions and enhancing energy efficiency.
+    Collaboration: You will be responsible for the entire process of developing product features, from understanding customer requirements to final feature deployment. This requires seamless collaboration with energy engineers, frontend and backend developers, product and customer success managers.
+    Research Support: Conduct experimental data analysis to refine and improve energy optimization algorithms.
+    Clear Communication: Present findings in a concise and understandable manner.
+    Additional tasks: Support our team in creating data models to predict energy time series data (e.g. heat demand, solar production, electricity consumption) and in optimizing energy systems using machine learning algorithms ((Un)supervised and Reinforcement Learning).
+
+Requirements
+
+    Location: You are living in Berlin.
+
+Experience
+
+    At least three years of professional experience in data science. Familiar with product lifecycles (Feasibility studies, requirement engineering, production-ready tool development, code reviews, feature deployments, continuous maintenance and improvement).
+
+Must haves
+
+    Strong skills in statistics, data modeling, data analysis and machine learning.
+    Educational background in: electrical engineering, mechanical engineering, physics or computer science, data science, mathematics with a strong background in energy tech.
+
+Technical Knowledge
+
+    Expertise in developing prediction models and working with energy time series data.
+    Proficient in Python, SQL, GraphQL, REST, and data science libraries like Pandas, SciPy, and Scikit-Learn. Machine Learning Operations skills are a plus.
+    Hands-on experience with version control systems (Git) and collaborative coding practices. 
+    Testing: Familiarity with testing frameworks and quality assurance practices to ensure robust and reliable product features.
+    Programming Style: Your code is clean, well-structured, maintainable, and easy to understand for team collaboration.
+    Communication: You are comfortable collaborating and communicating effectively with energy engineers, frontend and backend developers, and customer success managers.
+    Customer Focus: A strong understanding of customer needs and how they translate into technical solutions.
+    Language Skills: Fluent in English, with basic German.
+
+Benefits
+
+🏠 Flexible working hour models, home office, and remote work.
+
+💡 Ongoing training opportunities – whether through job challenges, our open feedback culture, or sponsored training programs, there are always opportunities to learn and grow.
+
+💼 Employee benefits such as Urban Sports Club or Become1.
+
+🌱 Direct impact through your job – with us, you can actively contribute to the energy transition and fight against climate change every day.
+
+💚 We value our team – that's why regular team events are very important to us.
+
+🙌 The best team that Berlin has to offer – and maybe even beyond. Don’t believe it? Then find out for yourself and apply now!
+
+While we are still considered pioneers today, we can soon dominate the market with you! First in the DACH region, then throughout Europe.
+
+You can expect a motivated, open-minded, and dynamic environment that is passionate and ambitious about actively shaping the energy transition – a goal that can only be achieved together!
+
+We look forward to your application – Fernanda will get in touch with you!

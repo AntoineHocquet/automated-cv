@@ -1,3 +1,5 @@
+# setup.py
+
 from setuptools import setup, find_packages
 
 setup(
@@ -5,16 +7,21 @@ setup(
     version="0.1",
     packages=find_packages(),  # Automatically finds backend/, frontend/ if needed
     install_requires=[
-        "streamlit",
         "langchain",
         "mistralai",
+        "streamlit",
         "tenacity",
+        "jinja2",
         "python-dotenv"
-        # Add more as needed (or rely on requirements.txt)
     ],
+    extras_require={
+        "gemini": [
+            "langchain-google-genai==2.1.5"
+        ]
+    },
     entry_points={
         "console_scripts": [
-            "automated-cv=frontend.app:main",  # optional CLI entry point if needed
+            "automated-cv=frontend.app:main",
         ]
     },
 )

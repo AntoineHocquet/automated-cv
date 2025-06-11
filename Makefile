@@ -1,17 +1,21 @@
-# Makefile for automated-cv project
+# Makefile for automated-cv
 
-# Set PYTHONPATH to current directory and run tests
-test:
-	PYTHONPATH=$(shell pwd) pytest
-
-# Optional: install dependencies inside venv
-install:
-	pip install -r requirements.txt
-
-# Run your app (if you have a CLI entry point later)
 run:
 	PYTHONPATH=$(shell pwd) streamlit run frontend/app.py
 
-# Clean up .pyc and __pycache__
+test:
+	PYTHONPATH=$(shell pwd) pytest
+
+install:
+	pip install -r requirements.txt
+
+install-dev:
+	pip install -e .[gemini]
+
 clean:
 	find . -type d -name "__pycache__" -exec rm -r {} + -o -name "*.pyc" -delete
+
+reset:
+	rm -rf venv
+	python3 -m venv venv
+	. venv/bin/activate && pip install -r requirements.txt

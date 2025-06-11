@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.6.1)  10 JUN 2025 22:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.6.1)  11 JUN 2025 08:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -53,7 +53,7 @@ Package: iftex 2024/12/12 v1.0g TeX engine tests
 File: l3backend-pdftex.def 2025-04-14 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count276
 )
-No file letter_streamlit.aux.
+(./letter_streamlit.aux)
 \openout1 = `letter_streamlit.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
@@ -70,6 +70,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 6.
 LaTeX Font Info:    ... okay on input line 6.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 6.
 LaTeX Font Info:    ... okay on input line 6.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -121,15 +122,15 @@ L3 programming layer <2025-04-29>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 1201 strings out of 469590
- 18786 string characters out of 5472431
+ 1204 strings out of 469590
+ 18861 string characters out of 5472431
  428316 words of memory out of 5000000
- 28114 multiletter control sequences out of 15000+600000
+ 28115 multiletter control sequences out of 15000+600000
  627588 words of font info for 41 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,7n,65p,935b,199s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,7n,65p,724b,199s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/texlive/texdir/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on letter_streamlit.pdf (1 page, 23756 bytes).
+Output written on letter_streamlit.pdf (1 page, 23976 bytes).
 PDF statistics:
  14 PDF objects out of 1000 (max. 8388607)
  8 compressed objects within 1 object stream
