@@ -104,8 +104,7 @@ if generate:
     if job_file:
         candidate = Candidate.from_json(PROFILE_FILE)
         job_text = open(job_file, encoding="utf-8").read()
-        job = Job(job_text, source=job_file)
-        job.populate_from_llm()
+        job = Job.populate_from_llm(raw_text=job_text)
 
         spec = LetterSpec(
             introduction="",  # to be filled by LLM

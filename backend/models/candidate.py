@@ -1,29 +1,19 @@
-# backend/models/candidate.py
-
-import json
 from typing import List, Dict, Optional
+from pydantic import BaseModel, Field
+import json
 
 
-class Candidate:
-    def __init__(
-        self,
-        name: str,
-        personal_data: Dict[str, str],
-        hard_skills: List[str],
-        soft_skills: List[str],
-        portfolio_links: List[str],
-        education: List[str],
-        languages_spoken: List[str],
-        miscellaneous: Optional[str] = "",
-    ):
-        self.name = name
-        self.personal_data = personal_data
-        self.hard_skills = hard_skills
-        self.soft_skills = soft_skills
-        self.portfolio_links = portfolio_links
-        self.education = education
-        self.languages_spoken = languages_spoken
-        self.miscellaneous = miscellaneous
+class Candidate(BaseModel):
+    """A candidate for a job."""
+    
+    name: str
+    personal_data: Dict[str, str]
+    hard_skills: List[str]
+    soft_skills: List[str]
+    portfolio_links: List[str]
+    education: List[str]
+    languages_spoken: List[str]
+    miscellaneous: Optional[str] = Field(default="", description="Extra info like hobbies or distinctions")
 
     def to_prompt_chunk(self) -> str:
         """Returns a natural-language summary suitable for LLM prompts."""
@@ -50,32 +40,14 @@ class Candidate:
         }
 
     def to_dict(self) -> Dict:
-        return {
-            "name": self.name,
-            "personal_data": self.personal_data,
-            "hard_skills": self.hard_skills,
-            "soft_skills": self.soft_skills,
-            "portfolio_links": self.portfolio_links,
-            "education": self.education,
-            "languages_spoken": self.languages_spoken,
-            "miscellaneous": self.miscellaneous,
-        }
+        return self.dict()
 
     @classmethod
-    def from_dict(cls, data: Dict):
-        return cls(
-            name=data["name"],
-            personal_data=data["personal_data"],
-            hard_skills=data["hard_skills"],
-            soft_skills=data["soft_skills"],
-            portfolio_links=data["portfolio_links"],
-            education=data["education"],
-            languages_spoken=data["languages_spoken"],
-            miscellaneous=data.get("miscellaneous", "")
-        )
+    def from_dict(cls, data: Dict) -> "Candidate":
+        return cls(**data)
 
     @classmethod
-    def from_json(cls, path: str):
+    def from_json(cls, path: str) -> "Candidate":
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         return cls.from_dict(data)
@@ -85,4 +57,4 @@ class Candidate:
             json.dump(self.to_dict(), f, indent=2, ensure_ascii=False)
 
     def __repr__(self):
-        return f"Candidate({self.name}, {self.personal_data.get('email')})"
+        return f"Candidate({self.name}, {self.personal_data.get('email', 'N/A')})"
