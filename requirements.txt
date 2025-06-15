@@ -6,3 +6,4 @@ tenacity
 jinja2
 python-dotenv
 pytest
+pydantic
