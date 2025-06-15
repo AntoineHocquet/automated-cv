@@ -1,26 +1,25 @@
 # backend/models/job.py
 
-import json
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from typing import List, Optional
+from pydantic import BaseModel, Field
+from langchain.output_parsers import OutputFixingParser, StructuredOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.documents import Document
-from langchain_core.runnables import Runnable
 from backend.llm_config import llm
 
 
-class Job:
-    def __init__(self, raw_text: str, source: str = ""):
-        self.raw_text = raw_text.strip()
-        self.source = source
+class Job(BaseModel):
+    # Input
+    raw_text: str
+    source: Optional[str] = ""
 
-        # Attributes to be filled by LLM
-        self.company_name = None
-        self.title = None
-        self.post_date = None
-        self.keywords = []
+    # Output
+    company_name: Optional[str] = None
+    title: Optional[str] = None
+    post_date: Optional[str] = None
+    keywords: List[str] = Field(default_factory=list)
 
     def to_document(self) -> Document:
-        """Return a LangChain-compatible document."""
         return Document(
             page_content=self.raw_text,
             metadata={
@@ -31,21 +30,13 @@ class Job:
             }
         )
 
-    # Use tenacity to retry on parse or runtime errors
-    @retry(
-        stop=stop_after_attempt(3),         # max 3 tries
-        wait=wait_exponential(multiplier=1, min=2, max=10), # exponential backoff: 2s, 4s, 8s
-        retry=retry_if_exception_type((json.JSONDecodeError, Exception)), # retry on parse or runtime errors
-        reraise=True
-    )
-    def populate_from_llm(self):
+    @classmethod
+    def populate_from_llm(cls, raw_text: str, source: str = "") -> "Job":
         """
-        Uses an LLM to fill structured attributes of the job.
-        Decorated with tenacity to retry on parse or runtime errors.
+        Class method that calls the LLM and returns a validated Job object.
         """
-        from langchain_core.prompts import PromptTemplate
-        from langchain_core.runnables import Runnable
-        from backend.llm_config import llm
+        parser = StructuredOutputParser.from_pexpect(cls)
+        fixing_parser = OutputFixingParser.from_llm(parser=parser, llm=llm)
 
         prompt = PromptTemplate.from_template("""
         You are given the full text of a job advertisement:
@@ -58,37 +49,15 @@ class Job:
         - Posting date (YYYY-MM-DD if mentioned)
         - 5–10 keywords
 
-        Return valid JSON like:
-        {{
-        "company_name": "...",
-        "title": "...",
-        "post_date": "...",
-        "keywords": ["...", "..."]
-        }}
+        Return valid JSON.
+        {format_instructions}
         """)
 
-        chain: Runnable = prompt | llm
-        response = chain.invoke({"ad": self.raw_text})
-
-        try:
-            cleaned = response.content.strip()
-
-            # Remove Markdown code block markers if present
-            if cleaned.startswith("```json"):
-                cleaned = cleaned.removeprefix("```json").strip()
-            if cleaned.endswith("```"):
-                cleaned = cleaned.removesuffix("```").strip()
-
-            parsed = json.loads(cleaned)
-            self.company_name = parsed.get("company_name")
-            self.title = parsed.get("title")
-            self.post_date = parsed.get("post_date")
-            self.keywords = parsed.get("keywords", [])
-        except json.JSONDecodeError:
-            print("⚠️ Failed to decode JSON from LLM response.")
-            print("🔍 Raw output was:\n", response.content)
-            raise
-
+        chain = prompt.partial(format_instructions=fixing_parser.get_format_instructions()) | llm | fixing_parser
+        parsed: Job = chain.invoke({"ad": raw_text})
+        parsed.raw_text = raw_text
+        parsed.source = source
+        return parsed
 
     def __repr__(self):
         return f"Job(company='{self.company_name}', title='{self.title}', post_date={self.post_date})"
