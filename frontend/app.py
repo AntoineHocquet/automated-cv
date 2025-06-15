@@ -1,5 +1,3 @@
-# frontend/app.py
-
 import sys
 import os
 sys.path.append(os.path.abspath("."))
@@ -79,18 +77,33 @@ with st.form("candidate_form"):
 
     submitted = st.form_submit_button("💾 Save Profile")
 
+# --- Upload a New Job Ad ---
+st.divider()
+st.header("📤 Upload New Job Ad (.txt)")
+uploaded_file = st.file_uploader("Upload a job description (.txt)", type=["txt"])
+
+if uploaded_file is not None:
+    ads_path = "ads"
+    os.makedirs(ads_path, exist_ok=True)
+    save_path = os.path.join(ads_path, uploaded_file.name)
+
+    with open(save_path, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+
+    st.success(f"✅ File '{uploaded_file.name}' uploaded to ads/ folder.")
+
 # --- Generate Cover Letter ---
 st.divider()
 st.header("📄 Generate Cover Letter PDF")
 
-job_files = sorted(glob.glob("ads/*.txt"))
+job_files = sorted([f for f in glob.glob("ads/*.txt") if os.path.isfile(f)])
 job_file = st.selectbox("Select a job ad", job_files)
 generate = st.button("🚀 Generate Cover Letter (PDF)")
 
 if generate:
     if job_file:
         candidate = Candidate.from_json(PROFILE_FILE)
-        job_text = open(job_file).read()
+        job_text = open(job_file, encoding="utf-8").read()
         job = Job(job_text, source=job_file)
         job.populate_from_llm()
 
@@ -113,11 +126,9 @@ if generate:
         pdf_path = tex_path.replace(".tex", ".pdf")
         st.success("✅ LaTeX letter generated!")
 
-        # Offer download of .tex file
         with open(tex_path, "rb") as f_tex:
             st.download_button("📄 Download LaTeX (.tex)", f_tex, file_name=os.path.basename(tex_path), mime="text/plain")
 
-        # Offer download of .pdf only if available
         if os.path.exists(pdf_path):
             with open(pdf_path, "rb") as f_pdf:
                 st.download_button("📥 Download PDF", f_pdf, file_name=os.path.basename(pdf_path), mime="application/pdf")

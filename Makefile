@@ -4,7 +4,7 @@ run:
 	PYTHONPATH=$(shell pwd) streamlit run frontend/app.py
 
 test:
-	PYTHONPATH=$(shell pwd) pytest
+	PYTHONPATH=$(shell pwd) pytest -s -v
 
 install:
 	pip install -r requirements.txt

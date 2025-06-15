@@ -1,25 +1,94 @@
 {
-  "name": "John Doe",
+  "name": "Antoine Hocquet",
   "personal_data": {
-    "email": "john@doe.com",
-    "phone": "+890 766556458977",
-    "address": "3 bd of broken flowers; Des Moines; Ioha"
+    "email": "antoine.hocquet86@gmail.com",
+    "phone": "+49 176 20557741",
+    "address": "Hussitenstrasse 68, 13355 Berlin, Germany"
   },
   "hard_skills": [
-    "J; Windows 94; Boules de petanque"
+    "Python",
+    "R",
+    "SQL",
+    "C++",
+    "Ocaml",
+    "Bash",
+    "MATLAB",
+    "Scilab",
+    "Maple",
+    "FreeFem++",
+    "Finite Element Methods",
+    "Numerical PDEs",
+    "Optimization",
+    "Scientific Simulations",
+    "Regression",
+    "Hypothesis Testing",
+    "Time Series",
+    "Probability Theory",
+    "Supervised Learning",
+    "Unsupervised Learning",
+    "Classification",
+    "Clustering",
+    "Feature Engineering",
+    "PyTorch",
+    "TensorFlow",
+    "Keras",
+    "pandas",
+    "NumPy",
+    "SciPy",
+    "Matplotlib",
+    "Seaborn",
+    "ggplot2",
+    "plotly",
+    "Dash",
+    "Folium",
+    "Git",
+    "GitHub",
+    "GitLab",
+    "Linux (Ubuntu)",
+    "Windows",
+    "LaTeX",
+    "BeautifulSoup",
+    "GitHub Actions",
+    "Docker",
+    "GitHub Codespaces",
+    "Rust",
+    "VS Code",
+    "Google Colab",
+    "LangChain"
   ],
   "soft_skills": [
-    "Always happy even when facing death risks"
+    "Science Communication",
+    "Public Speaking",
+    "Teaching",
+    "Mentoring",
+    "Analytical Thinking",
+    "Problem-Solving",
+    "Perseverance",
+    "Adaptability",
+    "Organizing Scientific Events",
+    "Interdisciplinary Collaboration",
+    "Effective Presentation",
+    "Attention to Detail"
   ],
   "portfolio_links": [
-    "www.antoinehocquet.com; www.google.com"
+    "https://antoinehocquet.com",
+    "https://github.com/AntoineHocquet",
+    "https://www.linkedin.com/in/antoine-hocquet-875231a7",
+    "https://github.com/AntoineHocquet/spaceY",
+    "https://github.com/AntoineHocquet/llg",
+    "https://github.com/AntoineHocquet/automated-cv",
+    "https://github.com/AntoineHocquet/RecSysEcho",
+    "https://github.com/AntoineHocquet/fhn"
   ],
   "education": [
-    "Ecole polytechnique (PhD in Physical inception, 2017); Msc in Charming Goat arts with liberal oppressions (2012);",
-    "Learned to read in 2011."
+    "Applied Data Science Program, MIT Professional Education (2024)",
+    "PhD in Applied Mathematics, École Polytechnique, France (2012-2016)",
+    "Master in Mathematics, ENS Cachan Bretagne (2011-2012)"
   ],
   "languages_spoken": [
-    "English; spanish; French; Italian; Bulgarian; Russian; Japanese; Lord of the Rings"
+    "French (native)",
+    "English (fluent)",
+    "German (B2 - conversational)"
   ],
-  "miscellaneous": "I have 300 Children and I love to play chess with them; My wife is a human and a dragon (half of the time). I am in love with VS Code, but she does not know (How to tell her?). My mother is the CEO of Github, so you should hire me."
+  "miscellaneous": "Married, 1 child. Passionate about astrophysics, theoretical physics, and quantum mechanics. Enjoys night sky observation with a personal telescope, playing guitar and piano, football, and cooking."
 }

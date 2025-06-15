@@ -1,0 +1,115 @@
+PLEASE APPLY WITH COVER LETTER
+Machine Learning Engineer 
+super.AI · Berlin, Berlin, Germany (On-site)
+Your AI-powered job assessment
+
+You'd be a top applicant, based on your skills, experience, and chances of hearing back
+
+
+Our mission
+
+Imagine yourself building the next breakthrough AI/Machine-Learning technology, enabling "AI for everyone" at the start of the company's explosive growth. 
+
+Super.AI is used by global enterprises across all industries, from banks, logistics, and insurance companies to Testing, Inspection, and certification (TIC) or retail companies. Super.AI has created the world’s most advanced AI automation platform to extract data from any document with guaranteed quality. We enable companies to leverage the latest AI models, including. LLMs, and super.AI Data Processing Crowd for human-in-the-loop (HITL) review to automate business processes end-to-end with guaranteed results.
+
+Your profile
+
+What You'll Do
+
+    Measure and ensure the high-quality output of AI workloads for our enterprise customers.
+    Deploy and manage production workloads for a global customer base.
+    Write, rewrite, and extend Python code, and deploy it to containers (e.g., Docker).
+    Conduct local testing using tools like Jupyter Notebook.
+    Integrate AI cloud solutions and adapt them to our large-scale use cases.
+    Perform prompt engineering for customer use cases.
+    Fine-tune and deploy Large Language Models (LLMs).
+    Develop software that scales to meet the demands of high-load customer workloads.
+
+What We Are Looking For
+
+    Smart, humble, hardworking, and collaborative
+        By smart we don't necessarily mean high IQ (although a huge plus), but an affinity toward learning. We want to automate as much as possible so we can focus on the few things that require human intelligence and creativity.
+        By humble we don't mean submissive or unambitious, we mean it in the same way Roger Federer is humble.
+        By hardworking, we don't mean long hours (be with your family). What we mean is while you're here you're doing the best work of your life. It means being disciplined, professional, focused, gritty, resilient, and resourceful.
+        By collaborative, we don't mean submissive or deferential, it means taking leadership from everywhere. "I'm taking responsibility to fix this system", if there's a lack of trust "I'm going to address it" if goals are unclear "I'm going to deal with it", it's about being a meritocracy
+        All four of the above are required. We all know people missing one of these and it's not nice to work with them (e.g. someone who is smart and hardworking but not humble and collaborative).
+    Paradoxical
+        The people we like the most are smart but humble
+        Wants to win no matter what, but will not cross lines of integrity to get there
+        Strong beliefs weakly held, etc.
+
+Your Experience
+
+    3-5 years of professional experience in software development.
+    Proven ability to work backwards from customer needs to deliver AI-based features that meet those needs.
+    Ability to organize and prioritize competing workloads.
+    Familiarity with distributed systems and cloud services (e.g., AWS, Azure, GCP).
+    Solid understanding of machine learning principles.
+    Experience with container frameworks such as Docker or Kubernetes.
+    Proficiency in using REST APIs.
+
+If this resonates with you, it would be amazing to get to know each other.
+
+Why us?
+
+At super.AI our mission is to make AI accessible to all and use AI to enrich the human experience and make the world a better place. We are a group of smart, creative people who have come together from MIT, Microsoft Research, AWS, Google, and Apple to work toward that mission. As a first step towards that goal, we have built an AI platform to help businesses make sense of unstructured data. Our culture is collaborative and fun that puts customers first.
+
+About Us
+
+    We believe AI is going to be the most impactful technology ever invented. It may be the last technology we ever needed to invent as humans. We don’t want it to be in the hands of the few, but the hands of the many. Our technology promises to transform the way AI is created and consumed to make this vision possible. 
+    We are searching for the best-of-the-best to build a massive company, but at the same time a company where people are happy with their lives, feel healthy, passionate and satisfied. 
+    We're at an inflection point, so you will have the opportunity to shape things and see the company grow
+    Although super.AI is young, this is not our first rodeo: our CEO previously founded a few hundred person company, and between us we've held senior positions at Google, Amazon, Adobe, Microsoft, Docusign and others
+
+See how you compare to others who clicked apply
+Candidates who clicked apply
+
+    559 total 6 in the past day 
+
+Candidate seniority level
+
+    59% Entry level candidates
+
+    26% Senior level candidates
+
+    1% Manager level candidates
+
+Candidate education level
+
+    35% have a Master's Degree 32% have a Master of Science 8% have a Bachelor's Degree 25% have other degrees 
+
+Exclusive Job Seeker Insights about super.AI
+The latest hiring trend
+
+    41
+
+    Total employees
+
+    7%
+
+    Company-wide
+
+    2 year growth
+    7% decrease
+
+Chart
+Chart with 25 data points.
+The chart has 1 X axis displaying Time. Range: 2022-10-24 18:48:00 to 2025-07-07 15:12:00.
+The chart has 1 Y axis displaying values. Range: 0 to 60.
+End of interactive chart.
+Median employee tenure ‧ 
+4 years
+super.AI hires candidates from some of these companies and schools
+
+    super.AI hired 1 person from Technische Universität Berlin. See all 
+
+Show more Premium insights
+About the company
+super.AI company logo
+super.AI
+4,783 followers
+Software Development 11-50 employees 41 on LinkedIn
+
+Automate business processes end-to-end with guaranteed results using super.AI Intelligent Document Processing (IDP).
+Show more
+

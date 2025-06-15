@@ -15,13 +15,13 @@ class LetterSpec(BaseModel):
         description="The main text content of the cover letter."
         )
     closing: str = Field(
-        default="",
+        default="Sincerely, Antoine Hocquet",
         description="The polite sign-off line of the letter, e.g., 'Sincerely, John Doe'"
         )
 
     # --- User formatting preferences ---
     size: Optional[str] = Field(
-        default="11pt",
+        default="12pt",
         description="Font size of the letter (e.g., 9pt, 10pt, 11pt, 12pt)."
         )
     font: Optional[str] = Field(

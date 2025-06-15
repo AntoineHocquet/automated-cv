@@ -1,0 +1,66 @@
+Senior Machine Learning Engineer - NLP (m/f/d)
+Permanent employee, Full-time · Berlin
+What we do
+
+Merantix Momentum is a Berlin-based AI startup focusing on accelerating AI adoption across many industries through B2B solutions, as well as publicly funded research projects. We work across several domains, including manufacturing, healthcare, the German public sector, and many more, transforming businesses as an external machine learning department. We achieve this using our core expertise in state-of-the-art machine learning combined with our culture of rapid iterations to build scalable solutions. 
+Your role
+
+Are you passionate about developing impactful applications of Machine Learning? The mission of this role is to bring state-of-the-art deep-learning methods to real-world applications from ideation and prototyping to production. 
+
+
+These will be your main responsibilities: 
+
+
+● Leading major projects 
+
+● Scope machine learning projects and their technical feasibility through client interaction 
+
+● Contribute to the next generation AI stack and grow the open source ecosystem 
+
+● Collaborate with data-, backend-, and frontend engineers in order to build production-ready AI solutions
+
+●Implement machine learning methods and apply them to real-world use cases  
+Your profile
+
+The ideal candidate is proficient in software engineering and the latest machine- and deep-learning technologies, while also having a solid understanding of machine learning theory and fundamentals. You will independently scope, plan, manage, and drive machine learning projects from the ideation to the production phase - with a particular focus on Natural Language Processing.
+
+
+You are a great fit for our team if this describes you: 
+
+
+● MSc/PhD in computer science, machine learning, or related technical field 
+
+● Relevant programming skills in Python and experience with libraries like PyTorch
+
+● Deep understanding of machine learning principles with hands-on experience training and fine-tuning neural networks
+
+● Appreciation for sound engineering practices like version control, clean code, code review, testing, CI/CD, and automation. 
+
+● Ability to interact with clients, to understand their problems, and to design as well as to explain complex technical solutions 
+
+● Fluency in English and German
+What we offer
+
+Engaging Topics and Excellence: We offer unique insights into applied machine learning research and development, working with a group of highly talented engineers and entrepreneurs. 
+
+● International Team: We are a dynamic and international team. 
+
+● We offer Visa Sponsorship. 
+
+● Learning and Development: We provide an annual learning and development budget for attending conferences or purchasing educational resources to further develop our employees’ skills. We also hold weekly and monthly events around AI innovation and implementation. 
+
+● Dynamic and open Working Culture: We have a very flat hierarchy, open 360° feedback, and flexibility in our work-from-home policy as well as working hours. 
+
+● AI Ethics: We are committed to developing ethical AI software and actively foster open discussions on this topic within our team. 
+
+● Brand new office space: Bright and open office situated on the AI Campus in Berlin. 
+
+● Hardware allowance: We give you support to have all the equipment you would need to thrive on your job.
+
+● Sabbatical Leave;
+
+● Employee benefits: We offer a monthly allowance per employee that can be allocated as desired to one of the following: Mobility & transportation (NAVIT), sports (Urban Sports Club) or groceries (Edenred). 
+Apply for this job
+About us
+We are an equal-opportunity employer and value diversity. We consider all applications equally regardless of race, color, ancestry, religion, sex, national origin, sexual orientation, age, citizenship, marital status, disability, or gender identity. We strongly encourage individuals from groups traditionally underrepresented in tech to apply, and we can help with immigration.
+

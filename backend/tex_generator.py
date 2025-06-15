@@ -9,9 +9,15 @@ from backend.models.candidate import Candidate
 
 
 def generate_letter(candidate: Candidate, job: Job, spec: LetterSpec) -> LetterSpec:
-    """Generate the structured content of a cover letter using the LLM and user preferences."""
+    """
+    Generate the structured content of a cover letter using the LLM and user preferences.
+    Input: candidate, job ad, user preferences
+    Output: structured cover letter
+    """
+    # Defines parser to parse LLM output into a Pydantic object
     parser = PydanticOutputParser(pydantic_object=LetterSpec)
 
+    # Defines prompt template
     prompt = PromptTemplate.from_template("""
 You are writing a personalized cover letter for a job application.
 
@@ -34,6 +40,7 @@ Use these preferences to generate a JSON object with:
 {format_instructions}
 """)
 
+    # Run LLM and parse output with Pydantic
     chain = (
         prompt.partial(format_instructions=parser.get_format_instructions())
         | llm
