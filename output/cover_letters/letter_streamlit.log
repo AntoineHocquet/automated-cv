@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.6.1)  15 JUN 2025 18:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.6.1)  16 JUN 2025 09:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -174,19 +174,21 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 36.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 36.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 36.
 
 
 [1
 
 {/opt/texlive/texdir/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/opt/texlive
 /texdir/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
-(./letter_streamlit.aux)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 42.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 42.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 42.
+
+
+[2] (./letter_streamlit.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-04-29>
@@ -195,19 +197,19 @@ L3 programming layer <2025-04-29>
 Here is how much of TeX's memory you used:
  3130 strings out of 469590
  51312 string characters out of 5472431
- 447488 words of memory out of 5000000
+ 449488 words of memory out of 5000000
  29979 multiletter control sequences out of 15000+600000
  634006 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,7n,65p,814b,228s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,7n,65p,850b,216s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/texlive/texdir/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></op
 t/texlive/texdir/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></opt/texl
 ive/texdir/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></opt/texlive/te
 xdir/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on letter_streamlit.pdf (1 page, 83179 bytes).
+Output written on letter_streamlit.pdf (2 pages, 87030 bytes).
 PDF statistics:
- 29 PDF objects out of 1000 (max. 8388607)
- 17 compressed objects within 1 object stream
+ 32 PDF objects out of 1000 (max. 8388607)
+ 19 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
