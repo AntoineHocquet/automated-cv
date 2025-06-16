@@ -1,4 +1,4 @@
-name: Run Tests
+name: Run tests with Makefile
 
 on: [push]
 
@@ -20,3 +20,5 @@ jobs:
 
     - name: Run tests with Makefile
       run: make test
+      env:
+        MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
