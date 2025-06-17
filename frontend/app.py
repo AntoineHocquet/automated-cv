@@ -1,25 +1,41 @@
 import sys
 import os
 sys.path.append(os.path.abspath("."))
+import re
+import json
+import glob
+from datetime import date
 
 import streamlit as st
+
 from backend.models.candidate import Candidate
 from backend.models.job import Job
 from backend.models.letter import LetterSpec
 from backend.tex_generator import render_cover_letter_tex
 from backend.compile_tex import compile_tex_to_pdf
-import json
-import glob
+from backend.translate import translate_if_needed
 
-# --- PAGE CONFIG ---
+# --- UTILS ---
+def to_snakecase(text):
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s\-]+", "_", text.strip())
+    return text.lower()
+
+def today():
+    return date.today().strftime("%Y_%m_%d")
+
+# --- PATHS ---
 DATA_PATH = "data/profiles"
 os.makedirs(DATA_PATH, exist_ok=True)
+os.makedirs("data/jobs", exist_ok=True)
+os.makedirs("data/letters", exist_ok=True)
 PROFILE_FILE = os.path.join(DATA_PATH, "params.json")
 
-st.set_page_config(page_title="Candidate Profile Setup", page_icon="🧠")
-st.title("🧠 Candidate Profile Setup")
+# --- PAGE CONFIG ---
+st.set_page_config(page_title="Candidate Profile Setup", page_icon="\U0001F9E0")
+st.title("\U0001F9E0 Candidate Profile Setup")
 
-# Load existing data if available
+# --- Load existing profile ---
 if os.path.exists(PROFILE_FILE):
     with open(PROFILE_FILE, "r", encoding="utf-8") as f:
         default_data = json.load(f)
@@ -61,7 +77,7 @@ with st.form("candidate_form"):
 
     # --- Customization Fields ---
     st.divider()
-    st.header("🧠 Customize Your Cover Letter")
+    st.header("\U0001F9E0 Customize Your Cover Letter")
 
     col1, col2 = st.columns(2)
 
@@ -75,11 +91,11 @@ with st.form("candidate_form"):
         paragraphs = st.slider("Number of paragraphs", min_value=1, max_value=6, value=3)
         idea = st.text_input("Idea to convey (optional)", value="")
 
-    submitted = st.form_submit_button("💾 Save Profile")
+    submitted = st.form_submit_button("\U0001F4BE Save Profile")
 
 # --- Upload a New Job Ad ---
 st.divider()
-st.header("📤 Upload New Job Ad (.txt)")
+st.header("\U0001F4E4 Upload New Job Ad (.txt)")
 uploaded_file = st.file_uploader("Upload a job description (.txt)", type=["txt"])
 
 if uploaded_file is not None:
@@ -94,20 +110,28 @@ if uploaded_file is not None:
 
 # --- Generate Cover Letter ---
 st.divider()
-st.header("📄 Generate Cover Letter PDF")
+st.header("\U0001F4C4 Generate Cover Letter")
 
 job_files = sorted([f for f in glob.glob("ads/*.txt") if os.path.isfile(f)])
 job_file = st.selectbox("Select a job ad", job_files)
-generate = st.button("🚀 Generate Cover Letter (PDF)")
+generate_german = st.checkbox("🇩🇪 Also generate letter in German?", value=False)
+generate = st.button("\U0001F680 Generate Latex Cover Letter")
 
 if generate:
     if job_file:
         candidate = Candidate.from_json(PROFILE_FILE)
         job_text = open(job_file, encoding="utf-8").read()
-        job = Job.populate_from_llm(raw_text=job_text)
+        translated_text = translate_if_needed(job_text)
+
+        if translated_text != job_text:
+            with open(job_file, "w", encoding="utf-8") as f:
+                f.write(translated_text)
+            st.info("✅ Job ad was detected as German and translated to English.")
+
+        job = Job.populate_from_llm(raw_text=translated_text)
 
         spec = LetterSpec(
-            introduction="",  # to be filled by LLM
+            introduction="",
             body="",
             closing="",
             size=size,
@@ -118,23 +142,53 @@ if generate:
             idea=idea
         )
 
-        tex_path = "output/cover_letters/letter_streamlit.tex"
+        filenamebody = f"{to_snakecase(job.company_name)}-{to_snakecase(job.title)}-{today()}"
+        job_filename = filenamebody + ".json"
+        with open(os.path.join("data/jobs", job_filename), "w", encoding="utf-8") as jf:
+            json.dump(job.model_dump(), jf, indent=2)
+
+        spec_filename = filenamebody + "_spec.json"
+        with open(os.path.join("data/letters", spec_filename), "w", encoding="utf-8") as sf:
+            json.dump(spec.model_dump(), sf, indent=2)
+
+        tex_path = f"output/cover_letters/{filenamebody}.tex"
         render_cover_letter_tex(candidate, job, spec, output_path=tex_path)
         compile_tex_to_pdf(tex_path)
 
         pdf_path = tex_path.replace(".tex", ".pdf")
         st.success("✅ LaTeX letter generated!")
 
-        with open(tex_path, "rb") as f_tex:
-            st.download_button("📄 Download LaTeX (.tex)", f_tex, file_name=os.path.basename(tex_path), mime="text/plain")
+        if os.path.exists(tex_path):
+            with open(tex_path, "rb") as f:
+                st.session_state["tex_bytes"] = f.read()
 
         if os.path.exists(pdf_path):
-            with open(pdf_path, "rb") as f_pdf:
-                st.download_button("📥 Download PDF", f_pdf, file_name=os.path.basename(pdf_path), mime="application/pdf")
-        else:
-            st.info("ℹ️ PDF compilation is not available on Streamlit Cloud. You can compile the .tex file locally using pdflatex.")
+            with open(pdf_path, "rb") as f:
+                st.session_state["pdf_bytes"] = f.read()
+
+        # Optional: generate German translation of letter
+        if generate_german and "tex_bytes" in st.session_state:
+            tex_de = translate_if_needed(st.session_state["tex_bytes"].decode("utf-8"), source_lang="en", target_lang="de")
+            tex_de_path = tex_path.replace(".tex", "_de.tex")
+            with open(tex_de_path, "w", encoding="utf-8") as f:
+                f.write(tex_de)
+            compile_tex_to_pdf(tex_de_path)
+            pdf_de_path = tex_de_path.replace(".tex", ".pdf")
+            if os.path.exists(pdf_de_path):
+                pdf_bytes_de = open(pdf_de_path, "rb").read()
+                st.download_button("📥 Download German PDF", pdf_bytes_de, file_name=os.path.basename(pdf_de_path))
+
     else:
         st.warning("⚠️ Please select a job ad before generating the PDF.")
+
+# --- Always show download buttons if bytes exist ---
+if "tex_bytes" in st.session_state:
+    st.download_button("📄 Download LaTeX (.tex)", st.session_state["tex_bytes"],
+                       file_name=os.path.basename("output/cover_letters/letter_streamlit.tex"), mime="text/plain")
+
+if "pdf_bytes" in st.session_state:
+    st.download_button("📥 Download PDF", st.session_state["pdf_bytes"],
+                       file_name=os.path.basename("output/cover_letters/letter_streamlit.pdf"), mime="application/pdf")
 
 if submitted:
     candidate = Candidate(

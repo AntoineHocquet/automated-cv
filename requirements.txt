@@ -7,3 +7,5 @@ jinja2
 python-dotenv
 pytest
 pydantic
+langdetect
+langchain-google-genai==2.1.5
