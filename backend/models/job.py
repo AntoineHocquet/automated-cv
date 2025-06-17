@@ -6,13 +6,19 @@ from langchain.output_parsers import OutputFixingParser, PydanticOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.documents import Document
 from langchain_core.exceptions import OutputParserException
-from backend.llm_config import llm
+from langdetect import detect
+from backend.llm_config import llm, llm_gemini
+
 
 
 class Job(BaseModel):
     raw_text: str = Field(
         default="",
         description="The full text of the job advertisement."
+    )
+    language: str = Field(
+        default="en",
+        description="The language used in the job advertisement: either 'fr', 'de', 'en'."
     )
     source: Optional[str] = Field(
         default="",
@@ -39,6 +45,7 @@ class Job(BaseModel):
         return Document(
             page_content=self.raw_text,
             metadata={
+                "language": self.language,
                 "source": self.source,
                 "company_name": self.company_name,
                 "title": self.title,
@@ -46,6 +53,28 @@ class Job(BaseModel):
             }
         )
 
+    def detect_language(self) -> str:
+        """
+        Detect the language of the job advertisement text.
+        Returns one of ['french', 'german', 'english'] if supported,
+        or an error message if not supported or detection fails.
+        """
+        SUPPORTED = {
+            "fr": "french",
+            "de": "german",
+            "en": "english"
+        }
+
+        try:
+            detected = detect(self.raw_text)
+            if detected in SUPPORTED:
+                return SUPPORTED[detected]
+            else:
+                return f"Error: Language '{detected}' is not supported."
+        except Exception as e:
+            return "Error: Unable to detect language."
+
+           
     @classmethod
     def populate_from_llm(cls, raw_text: str, source: str = "") -> "Job":
         """

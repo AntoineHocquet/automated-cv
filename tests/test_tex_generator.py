@@ -21,7 +21,7 @@ def dummy_job():
     return Job(
         raw_text="We are looking for a Machine Learning Engineer at FutureTech. "
                  "The ideal candidate is passionate about AI and innovation.",
-        source="test_input.txt",
+        source="Indeed",
         company_name="FutureTech",
         title="Machine Learning Engineer",
         post_date="2024-06-15",
@@ -47,8 +47,10 @@ def test_generate_letter_returns_valid_spec():
 
     result = generate_letter(candidate, job, spec)
 
-    print("\n","Letter content:","\n")
-    print(result.introduction, "\n", result.body, "\n", result.closing, "\n")
+    # print all fields in a for loop
+    print("Letter content:")
+    for field, value in result.model_dump().items():
+        print(f"- {field}: {value}")
 
     assert isinstance(result.introduction, str) and result.introduction.strip()
     assert isinstance(result.body, str) and result.body.strip()

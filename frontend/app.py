@@ -114,7 +114,7 @@ st.header("\U0001F4C4 Generate Cover Letter")
 
 job_files = sorted([f for f in glob.glob("ads/*.txt") if os.path.isfile(f)])
 job_file = st.selectbox("Select a job ad", job_files)
-generate_german = st.checkbox("🇩🇪 Also generate letter in German?", value=False)
+# generate_german = st.checkbox("🇩🇪 Also generate letter in German?", value=False)
 generate = st.button("\U0001F680 Generate Latex Cover Letter")
 
 if generate:
@@ -166,17 +166,17 @@ if generate:
             with open(pdf_path, "rb") as f:
                 st.session_state["pdf_bytes"] = f.read()
 
-        # Optional: generate German translation of letter
-        if generate_german and "tex_bytes" in st.session_state:
-            tex_de = translate_if_needed(st.session_state["tex_bytes"].decode("utf-8"), source_lang="en", target_lang="de")
-            tex_de_path = tex_path.replace(".tex", "_de.tex")
-            with open(tex_de_path, "w", encoding="utf-8") as f:
-                f.write(tex_de)
-            compile_tex_to_pdf(tex_de_path)
-            pdf_de_path = tex_de_path.replace(".tex", ".pdf")
-            if os.path.exists(pdf_de_path):
-                pdf_bytes_de = open(pdf_de_path, "rb").read()
-                st.download_button("📥 Download German PDF", pdf_bytes_de, file_name=os.path.basename(pdf_de_path))
+        # # Optional: generate German translation of letter
+        # if generate_german and "tex_bytes" in st.session_state:
+        #     tex_de = translate_if_needed(st.session_state["tex_bytes"].decode("utf-8"), source_lang="en", target_lang="de")
+        #     tex_de_path = tex_path.replace(".tex", "_de.tex")
+        #     with open(tex_de_path, "w", encoding="utf-8") as f:
+        #         f.write(tex_de)
+        #     compile_tex_to_pdf(tex_de_path)
+        #     pdf_de_path = tex_de_path.replace(".tex", ".pdf")
+        #     if os.path.exists(pdf_de_path):
+        #         pdf_bytes_de = open(pdf_de_path, "rb").read()
+        #         st.download_button("📥 Download German PDF", pdf_bytes_de, file_name=os.path.basename(pdf_de_path))
 
     else:
         st.warning("⚠️ Please select a job ad before generating the PDF.")
