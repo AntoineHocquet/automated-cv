@@ -11,7 +11,7 @@ import streamlit as st
 from backend.models.candidate import Candidate
 from backend.models.job import Job
 from backend.models.letter import LetterSpec
-from backend.tex_generator import render_cover_letter_tex
+from backend.tex_generator import generate_letter, render_cover_letter_tex
 from backend.compile_tex import compile_tex_to_pdf
 
 # --- UTILS ---
@@ -34,12 +34,26 @@ PROFILE_FILE = os.path.join(DATA_PATH, "params.json")
 st.set_page_config(page_title="Candidate Profile Setup", page_icon="\U0001F9E0")
 st.title("\U0001F9E0 Candidate Profile Setup")
 
-# --- Load existing profile ---
-if os.path.exists(PROFILE_FILE):
+# --- Load existing profile into session state at first app load ---
+if "candidate" not in st.session_state and os.path.exists(PROFILE_FILE):
     with open(PROFILE_FILE, "r", encoding="utf-8") as f:
-        default_data = json.load(f)
-else:
-    default_data = {
+        st.session_state["candidate"] = Candidate.from_dict(json.load(f))
+
+# --- Initialize spec and persistent font-related parameters ---
+if "spec" not in st.session_state:
+    st.session_state["spec"] = LetterSpec()
+spec = st.session_state["spec"]
+
+if "font_size" not in st.session_state:
+    st.session_state["font_size"] = "12pt"
+if "font_scale" not in st.session_state:
+    st.session_state["font_scale"] = 0.75
+if "font_family" not in st.session_state:
+    st.session_state["font_family"] = "default"
+
+# --- Form for Candidate Profile ---
+with st.form("candidate_form"):
+    default_data = st.session_state["candidate"].model_dump() if "candidate" in st.session_state else {
         "name": "",
         "personal_data": {"email": "", "phone": "", "address": ""},
         "hard_skills": [],
@@ -50,8 +64,6 @@ else:
         "miscellaneous": ""
     }
 
-# --- Form ---
-with st.form("candidate_form"):
     name = st.text_input("Full Name", value=default_data["name"])
     email = st.text_input("Email", value=default_data["personal_data"].get("email", ""))
     phone = st.text_input("Phone Number", value=default_data["personal_data"].get("phone", ""))
@@ -74,137 +86,10 @@ with st.form("candidate_form"):
 
     misc = st.text_area("Miscellaneous Notes", value=default_data["miscellaneous"])
 
-    # --- Customization Fields ---
-    st.divider()
-    st.header("\U0001F9E0 Customize Your Cover Letter")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        size = st.selectbox("Font size", ["9pt", "10pt", "11pt", "12pt"], index=3)
-        font = st.selectbox("Font family", ["default", "times", "fourier", "euler"], index=0)
-
-    with col2:
-        style = st.selectbox("Writing style", ["enthusiastic", "confident", "factual", "cold"], index=1)
-        length = st.selectbox("Length", ["succint", "normal", "thorough"], index=1)
-        paragraphs = st.slider("Number of paragraphs", min_value=1, max_value=6, value=3)
-        idea = st.text_input("Idea to convey (optional)", value="")
-
+    # --- Submit Button ---
     submitted = st.form_submit_button("\U0001F4BE Save Profile")
 
-# --- Upload a New Job Ad ---
-st.divider()
-st.header("\U0001F4E4 Upload New Job Ad (.txt)")
-uploaded_file = st.file_uploader("Upload a job description (.txt)", type=["txt"])
-
-if uploaded_file is not None:
-    ads_path = "ads"
-    os.makedirs(ads_path, exist_ok=True)
-    save_path = os.path.join(ads_path, uploaded_file.name)
-
-    with open(save_path, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-
-    st.success(f"✅ File '{uploaded_file.name}' uploaded to ads/ folder.")
-
-# --- Generate Cover Letter ---
-st.divider()
-st.header("\U0001F4C4 Generate Cover Letter")
-
-raw_job_files = sorted([f for f in glob.glob("ads/*.txt") if os.path.isfile(f)])
-raw_job_file = st.selectbox("Select a job ad", raw_job_files)
-
-fit_to_ad_language = st.checkbox(
-    "🌍 Generate the letter in the language of the ad (if supported)?",
-    value=False
-    )
-generate = st.button("\U0001F680 Generate Latex Cover Letter")
-
-if generate:
-    if raw_job_file:
-        candidate = Candidate.from_json(PROFILE_FILE)
-        raw_job_text = open(raw_job_file, encoding="utf-8").read()
-        job = Job(raw_text=raw_job_text)
-        job.translate_if_needed()
-
-        if job.language in ["french", "german"]:
-            st.info(f"✅ Job ad was detected as {job.language} and translated to English for internal processing.")
-        
-        # Populate the job object with Mistral-based method and displays the results
-        filled_job= Job.populate_from_llm(raw_text=job.raw_text)
-        filled_job.language = job.language
-        
-        st.markdown("\U0001F4DD **Language**: " + filled_job.language)
-        st.markdown("\U0001F4DD **Keywords**: " + ", ".join(filled_job.keywords))
-        st.markdown("\U0001F4DD **Title**: " + filled_job.title)
-        st.markdown("\U0001F4DD **Company**: " + filled_job.company_name)
-        st.markdown("\U0001F4DD **Post Date**: " + filled_job.post_date)
-
-        # Defines a generic filename based on extracted job title, company name and current date
-        filenamebody = f"{to_snakecase(filled_job.company_name)}-{to_snakecase(filled_job.title)}-{today()}"
-
-        # Uses the generic filename to save the populated job instance as a .json file
-        job_filename = filenamebody + ".json"
-        with open(os.path.join("data/jobs", job_filename), "w", encoding="utf-8") as jf:
-            json.dump(filled_job.model_dump(), jf, indent=2)
-
-        # Instantiates a LetterSpec with user specified parameters
-        spec = LetterSpec(
-            introduction="",
-            body="",
-            closing="",
-            size=size,
-            font=font,
-            style=style,
-            length=length,
-            paragraphs=paragraphs,
-            idea=idea
-        )
-
-        # Uses similar generic filename as before to save the letter spec as .JSON
-        spec_filename = filenamebody + "_spec.json"
-        with open(os.path.join("data/letters", spec_filename), "w", encoding="utf-8") as sf:
-            json.dump(spec.model_dump(), sf, indent=2)
-
-        # Defines the output path for the LaTeX cover letter based on the generic filename
-        tex_path = f"output/cover_letters/{filenamebody}.tex"
-
-        # Creates the LaTeX cover letter
-        render_cover_letter_tex(
-            candidate,
-            filled_job,
-            spec,
-            output_path=tex_path,
-            fit_ad_language=fit_to_ad_language
-        )
-
-        # Compiles the LaTeX cover letter to PDF and displays a success message
-        compile_tex_to_pdf(tex_path)
-        st.success("✅ LaTeX letter generated!")
-        
-        # TEX
-        if os.path.exists(tex_path):
-            with open(tex_path, "rb") as f:
-                st.session_state["tex_bytes"] = f.read()
-
-        # PDF
-        pdf_path = tex_path.replace(".tex", ".pdf")
-        if os.path.exists(pdf_path):
-            with open(pdf_path, "rb") as f:
-                st.session_state["pdf_bytes"] = f.read()
-
-    else:
-        st.warning("⚠️ Please select a job ad before generating the PDF.")
-
-# --- Always show download buttons if bytes exist ---
-if "tex_bytes" in st.session_state:
-    st.download_button("📄 Download LaTeX (.tex)", st.session_state["tex_bytes"],
-                       file_name=os.path.basename("output/cover_letters/letter_streamlit.tex"), mime="text/plain")
-
-if "pdf_bytes" in st.session_state:
-    st.download_button("📥 Download PDF", st.session_state["pdf_bytes"],
-                       file_name=os.path.basename("output/cover_letters/letter_streamlit.pdf"), mime="application/pdf")
-
+# --- If submitted: save Candidate Profile and display summary ---
 if submitted:
     candidate = Candidate(
         name=name,
@@ -216,8 +101,152 @@ if submitted:
         languages_spoken=[l.strip() for l in languages_spoken.split(",") if l.strip()],
         miscellaneous=misc.strip()
     )
-
     candidate.to_json(PROFILE_FILE)
+    st.session_state["candidate"] = candidate
     st.success("✅ Candidate profile saved!")
     st.markdown("### LLM Prompt Summary")
     st.info(candidate.to_prompt_chunk())
+
+elif "candidate" in st.session_state:
+    candidate = st.session_state["candidate"]
+    st.markdown("### LLM Prompt Summary")
+    st.info(candidate.to_prompt_chunk())
+else:
+    candidate = Candidate.from_dict(default_data)
+    st.warning("⚠️ Candidate and letter fields are set to default.")
+
+# --- Preview Letter Customization Fields ---
+st.divider()
+st.header("\U0001F9E0 Customize Your Cover Letter")
+
+spec.style = st.selectbox("Writing style", ["enthusiastic", "confident", "factual", "cold"], index=1)
+spec.length = st.selectbox("Length", ["succint", "normal", "thorough"], index=1)
+spec.paragraphs = st.slider("Number of paragraphs", min_value=1, max_value=6, value=3)
+spec.idea = st.text_input("Idea to convey (optional)", value="")
+
+# --- Upload a New Job Ad ---
+st.divider()
+st.header("\U0001F4E4 Upload New Job Ad (.txt)")
+uploaded_file = st.file_uploader("Upload a job description (.txt)", type=["txt"])
+
+if uploaded_file:
+    ads_path = "ads"
+    os.makedirs(ads_path, exist_ok=True)
+    save_path = os.path.join(ads_path, uploaded_file.name)
+    with open(save_path, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+    st.success(f"✅ File '{uploaded_file.name}' uploaded to ads/ folder.")
+    st.session_state.preview_ready = False  # Reset preview when a new file is uploaded
+
+# --- Generate Cover Letter ---
+st.divider()
+st.header("\U0001F4C4 Generate Cover Letter")
+
+raw_job_files = sorted([f for f in glob.glob("ads/*.txt") if os.path.isfile(f)])
+raw_job_file = st.selectbox("Select a job ad", raw_job_files)
+
+if st.button("\U0001F680 Generate Preview", type="primary"):
+    st.session_state.preview_ready = True
+
+# --- Main logic ---
+if st.session_state.get("preview_ready", False):
+    if raw_job_file:
+        raw_job_text = open(raw_job_file, encoding="utf-8").read()
+        job = Job(raw_text=raw_job_text)
+        job.translate_if_needed()
+
+        if job.language in ["french", "german"]:
+            st.info(f"✅ Job ad was detected as {job.language} and translated to English for internal processing.")
+
+        # Store filled_job in st.session_state to avoid recomputing
+        if "filled_job" not in st.session_state:
+            st.session_state.filled_job = Job.populate_from_llm(raw_text=job.raw_text)
+        filled_job = st.session_state.filled_job
+
+        st.header("\U0001F4DD Job Ad LLM Preprocessing:")
+        filled_job.language = job.language
+        st.markdown(" **Ad Language**: " + filled_job.language)
+        st.markdown(" **Ad Keywords**: " + ", ".join(filled_job.keywords))
+        st.markdown(" **Job Title**: " + filled_job.title)
+        st.markdown(" **Company**: " + filled_job.company_name)
+        st.markdown(" **Post Date**: " + filled_job.post_date)
+
+        filenamebody = f"{to_snakecase(filled_job.company_name)}-{to_snakecase(filled_job.title)}-{today()}"
+        job_filename = filenamebody + ".json"
+        spec_filename = filenamebody + "_spec.json"
+        tex_path = f"output/cover_letters/{filenamebody}.tex"
+        pdf_path = tex_path.replace(".tex", ".pdf")
+
+        with open(os.path.join("data/jobs", job_filename), "w", encoding="utf-8") as jf:
+            json.dump(filled_job.model_dump(), jf, indent=2)
+
+        #  Generate filled_spec and persist it in st.session_state after it’s created once.
+        if "filled_spec" not in st.session_state:
+            st.session_state.filled_spec = generate_letter(candidate, filled_job, spec)
+        filled_spec = st.session_state.filled_spec
+
+
+        with open(os.path.join("data/letters", spec_filename), "w", encoding="utf-8") as sf:
+            json.dump(spec.model_dump(), sf, indent=2)
+        st.success(f"✅ Cover letter preview successfully generated and saved to data/letters/{spec_filename}")
+        st.markdown("### \U0001F4DD Edit and Approve Preview")
+
+        # --- Preview Letter Customization Fields ---
+        intro = st.text_area("Introduction", value=filled_spec.introduction, height=100, key="edit_intro")
+        body = st.text_area("Body", value=filled_spec.body, height=200, key="edit_body")
+        closing = st.text_area("Closing", value=filled_spec.closing, height=100, key="edit_closing")
+
+        # --- Post-preview font and size customization ---
+        st.markdown("### \U0001F4DD Customize LaTeX Output")
+        size = st.selectbox("Font size", ["9pt", "10pt", "11pt", "12pt"], index=3, key="font_size")
+        scale = st.slider("Scale", min_value=0.4, max_value=0.9, value=0.75, step=0.01, key="font_scale")
+        font = st.selectbox("Font family", ["default", "times", "fourier", "euler"], index=0, key="font_family")
+
+        # --- Post-preview language customization ---
+        st.markdown("### \U0001F4DD Customize Language")
+        fit_to_ad_language = st.checkbox(
+            "🌍 Generate the letter in the language of the ad? (French or German are supported.)",
+            value=False
+        )
+
+        # --- Export to LaTeX Cover Letter ---
+        if st.button("\U0001F4DD Save and export to PDF", type="primary"):
+            # update letter fields
+            filled_spec.introduction = intro
+            filled_spec.body = body
+            filled_spec.closing = closing
+
+            # Update letter spec with .TEX related fields
+            filled_spec.size = st.session_state["font_size"]
+            filled_spec.scale = st.session_state["font_scale"]
+            filled_spec.font = st.session_state["font_family"]
+
+            # Overwrite existing spec
+            with open(os.path.join("data/letters", spec_filename), "w", encoding="utf-8") as sf:
+                json.dump(filled_spec.model_dump(), sf, indent=2)
+            st.info(f"Letter spec (editable preview) saved to data/letters/{spec_filename}")
+
+            render_cover_letter_tex(candidate, filled_job, filled_spec, output_path=tex_path, fit_ad_language=fit_to_ad_language)
+            st.success(f"✅ LaTeX cover letter saved to {tex_path}")
+
+            compile_tex_to_pdf(tex_path)
+            st.success("✅ LaTeX letter generated!")
+
+            if os.path.exists(tex_path):
+                with open(tex_path, "rb") as f:
+                    st.session_state["tex_bytes"] = f.read()
+
+            if os.path.exists(pdf_path):
+                with open(pdf_path, "rb") as f:
+                    st.session_state["pdf_bytes"] = f.read()
+
+        # --- Always show download buttons if bytes exist ---
+        if "tex_bytes" in st.session_state:
+            st.download_button("📄 Download LaTeX (.tex)", st.session_state["tex_bytes"],
+                               file_name=os.path.basename(tex_path), mime="text/plain")
+
+        if "pdf_bytes" in st.session_state:
+            st.download_button("📥 Download PDF", st.session_state["pdf_bytes"],
+                               file_name=os.path.basename(pdf_path), mime="application/pdf")
+    else:
+        st.warning("⚠️ Please select a job ad before generating a preview.")

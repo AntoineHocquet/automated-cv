@@ -125,6 +125,7 @@ def render_cover_letter_tex(
         body=filled_spec.body.strip(),
         closing=filled_spec.closing.strip(),
         size=filled_spec.size,
+        scale=filled_spec.scale,
         font=filled_spec.font
     )
 

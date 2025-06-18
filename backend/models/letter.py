@@ -28,6 +28,10 @@ class LetterSpec(BaseModel):
         default="12pt",
         description="Font size of the letter (e.g., 9pt, 10pt, 11pt, 12pt)."
         )
+    scale: Optional[float] = Field(
+        default=0.75,
+        description="Scale factor for the letter (e.g., 0.8, 0.9, 1.0)."
+        )
     font: Optional[str] = Field(
         default="default",
         description="LaTeX font family: default, times, fourier, or euler."
