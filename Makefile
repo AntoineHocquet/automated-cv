@@ -6,9 +6,6 @@ run:
 test:
 	PYTHONPATH=$(shell pwd) pytest -s -v
 
-minimal:
-	PYTHONPATH=$(shell pwd) python3 minimal.py
-
 install:
 	pip install -r requirements.txt
 

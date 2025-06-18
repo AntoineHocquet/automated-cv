@@ -13,7 +13,6 @@ from backend.models.job import Job
 from backend.models.letter import LetterSpec
 from backend.tex_generator import render_cover_letter_tex
 from backend.compile_tex import compile_tex_to_pdf
-from backend.translate import translate_if_needed
 
 # --- UTILS ---
 def to_snakecase(text):
@@ -112,24 +111,44 @@ if uploaded_file is not None:
 st.divider()
 st.header("\U0001F4C4 Generate Cover Letter")
 
-job_files = sorted([f for f in glob.glob("ads/*.txt") if os.path.isfile(f)])
-job_file = st.selectbox("Select a job ad", job_files)
-# generate_german = st.checkbox("🇩🇪 Also generate letter in German?", value=False)
+raw_job_files = sorted([f for f in glob.glob("ads/*.txt") if os.path.isfile(f)])
+raw_job_file = st.selectbox("Select a job ad", raw_job_files)
+
+fit_to_ad_language = st.checkbox(
+    "🌍 Generate the letter in the language of the ad (if supported)?",
+    value=False
+    )
 generate = st.button("\U0001F680 Generate Latex Cover Letter")
 
 if generate:
-    if job_file:
+    if raw_job_file:
         candidate = Candidate.from_json(PROFILE_FILE)
-        job_text = open(job_file, encoding="utf-8").read()
-        translated_text = translate_if_needed(job_text)
+        raw_job_text = open(raw_job_file, encoding="utf-8").read()
+        job = Job(raw_text=raw_job_text)
+        job.translate_if_needed()
 
-        if translated_text != job_text:
-            with open(job_file, "w", encoding="utf-8") as f:
-                f.write(translated_text)
-            st.info("✅ Job ad was detected as German and translated to English.")
+        if job.language in ["french", "german"]:
+            st.info(f"✅ Job ad was detected as {job.language} and translated to English for internal processing.")
+        
+        # Populate the job object with Mistral-based method and displays the results
+        filled_job= Job.populate_from_llm(raw_text=job.raw_text)
+        filled_job.language = job.language
+        
+        st.markdown("\U0001F4DD **Language**: " + filled_job.language)
+        st.markdown("\U0001F4DD **Keywords**: " + ", ".join(filled_job.keywords))
+        st.markdown("\U0001F4DD **Title**: " + filled_job.title)
+        st.markdown("\U0001F4DD **Company**: " + filled_job.company_name)
+        st.markdown("\U0001F4DD **Post Date**: " + filled_job.post_date)
 
-        job = Job.populate_from_llm(raw_text=translated_text)
+        # Defines a generic filename based on extracted job title, company name and current date
+        filenamebody = f"{to_snakecase(filled_job.company_name)}-{to_snakecase(filled_job.title)}-{today()}"
 
+        # Uses the generic filename to save the populated job instance as a .json file
+        job_filename = filenamebody + ".json"
+        with open(os.path.join("data/jobs", job_filename), "w", encoding="utf-8") as jf:
+            json.dump(filled_job.model_dump(), jf, indent=2)
+
+        # Instantiates a LetterSpec with user specified parameters
         spec = LetterSpec(
             introduction="",
             body="",
@@ -142,41 +161,37 @@ if generate:
             idea=idea
         )
 
-        filenamebody = f"{to_snakecase(job.company_name)}-{to_snakecase(job.title)}-{today()}"
-        job_filename = filenamebody + ".json"
-        with open(os.path.join("data/jobs", job_filename), "w", encoding="utf-8") as jf:
-            json.dump(job.model_dump(), jf, indent=2)
-
+        # Uses similar generic filename as before to save the letter spec as .JSON
         spec_filename = filenamebody + "_spec.json"
         with open(os.path.join("data/letters", spec_filename), "w", encoding="utf-8") as sf:
             json.dump(spec.model_dump(), sf, indent=2)
 
+        # Defines the output path for the LaTeX cover letter based on the generic filename
         tex_path = f"output/cover_letters/{filenamebody}.tex"
-        render_cover_letter_tex(candidate, job, spec, output_path=tex_path)
+
+        # Creates the LaTeX cover letter
+        render_cover_letter_tex(
+            candidate,
+            filled_job,
+            spec,
+            output_path=tex_path,
+            fit_ad_language=fit_to_ad_language
+        )
+
+        # Compiles the LaTeX cover letter to PDF and displays a success message
         compile_tex_to_pdf(tex_path)
-
-        pdf_path = tex_path.replace(".tex", ".pdf")
         st.success("✅ LaTeX letter generated!")
-
+        
+        # TEX
         if os.path.exists(tex_path):
             with open(tex_path, "rb") as f:
                 st.session_state["tex_bytes"] = f.read()
 
+        # PDF
+        pdf_path = tex_path.replace(".tex", ".pdf")
         if os.path.exists(pdf_path):
             with open(pdf_path, "rb") as f:
                 st.session_state["pdf_bytes"] = f.read()
-
-        # # Optional: generate German translation of letter
-        # if generate_german and "tex_bytes" in st.session_state:
-        #     tex_de = translate_if_needed(st.session_state["tex_bytes"].decode("utf-8"), source_lang="en", target_lang="de")
-        #     tex_de_path = tex_path.replace(".tex", "_de.tex")
-        #     with open(tex_de_path, "w", encoding="utf-8") as f:
-        #         f.write(tex_de)
-        #     compile_tex_to_pdf(tex_de_path)
-        #     pdf_de_path = tex_de_path.replace(".tex", ".pdf")
-        #     if os.path.exists(pdf_de_path):
-        #         pdf_bytes_de = open(pdf_de_path, "rb").read()
-        #         st.download_button("📥 Download German PDF", pdf_bytes_de, file_name=os.path.basename(pdf_de_path))
 
     else:
         st.warning("⚠️ Please select a job ad before generating the PDF.")

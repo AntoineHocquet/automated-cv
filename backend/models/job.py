@@ -51,28 +51,50 @@ class Job(BaseModel):
                 "title": self.title,
                 "post_date": self.post_date
             }
-        )
+        )        
 
-    def detect_language(self) -> str:
+    def translate_if_needed(self) -> None:
         """
-        Detect the language of the job advertisement text.
-        Returns one of ['french', 'german', 'english'] if supported,
-        or an error message if not supported or detection fails.
+        Detects the language of the input job ad text and fills in the `language` field.
+        If French or German, translates it into English using Gemini and mutates `raw_text`.
+        If English, does nothing.
+        Raises an error for unsupported languages or failed translations.
         """
-        SUPPORTED = {
-            "fr": "french",
-            "de": "german",
-            "en": "english"
-        }
 
+        if not self.raw_text.strip():
+            raise ValueError("Job raw_text is empty or whitespace-only.")
+
+        # Step 1: Detect language
+        SUPPORTED = {"fr": "french", "de": "german", "en": "english"}
         try:
             detected = detect(self.raw_text)
             if detected in SUPPORTED:
-                return SUPPORTED[detected]
+                self.language = SUPPORTED[detected]
             else:
-                return f"Error: Language '{detected}' is not supported."
+                raise ValueError(f"Language '{detected}' is not supported. Only English, French, and German are allowed.")
         except Exception as e:
-            return "Error: Unable to detect language."
+            print("Error: Unable to detect language.")
+            raise e
+
+        # Step 2: Translate if necessary
+        if self.language == "english":
+            return
+
+        prompt = f"""
+        Translate the following job advertisement from {self.language} to English.
+        Preserve structure and formatting. Do not add commentary.
+
+        ```job_ad
+        {self.raw_text}
+        ```
+        """
+
+        response = llm_gemini.invoke(prompt)
+        if not hasattr(response, "content") or not response.content.strip():
+            raise RuntimeError("Translation failed or returned empty content.")
+
+        self.raw_text = response.content.strip()
+        return
 
            
     @classmethod

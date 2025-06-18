@@ -1,0 +1,44 @@
+\documentclass[{{ size }}]{letter}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{textcomp}
+\usepackage{graphicx}
+\pagestyle{empty}
+\usepackage[scale=0.75]{geometry}
+\setlength{\parindent}{0pt}
+\addtolength{\parskip}{6pt}
+\renewcommand{\ttdefault}{pcr}
+
+{% if font == 'times' %}
+\usepackage{mathptmx}
+{% elif font == 'fourier' %}
+\usepackage{fourier}
+{% elif font == 'euler' %}
+\usepackage{eulervm}
+{% endif %}
+
+\begin{document}
+\begin{letter}{ \itshape Objet : Candidature au poste de {{ title }} }
+\hfill
+\begin{flushleft}
+    {\bfseries {{ name }} }\\[.35ex]
+    \small\itshape
+    {{ address }}\\
+    Téléphone : {{ phone }}\\
+    {{ email }}
+\end{flushleft}
+
+\hfill
+\begin{flushright}
+    \itshape {{ company_name }} \\
+\end{flushright}
+
+\opening{ {{ introduction }} }
+
+{{ body }}
+
+\closing{ {{ closing }} }
+
+\end{letter}
+\end{document}

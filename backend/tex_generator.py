@@ -10,6 +10,7 @@ from backend.models.candidate import Candidate
 from langchain_core.outputs import Generation
 
 
+
 def sanitize_output_text(json_text: str) -> str:
     """
     Sanitize malformed JSON text from LLM output, especially field names with escaped characters.
@@ -67,25 +68,51 @@ Use these preferences to generate a JSON object with:
     return parser.parse(clean_text)
 
 
+
 def render_cover_letter_tex(
     candidate: Candidate,
     job: Job,
-    spec: LetterSpec,
-    output_path: str = "output/cover_letters/letter.tex"
-):
+    filled_spec: LetterSpec,
+    output_path: str = "output/cover_letters/letter.tex",
+    fit_ad_language: bool = False
+) -> None:
     """
     Generate .tex cover letter using structured LLM output and a Jinja2 LaTeX template.
+
+    If `fit_ad_language=True`, detect the language of the job ad and:
+    - Translate the letter spec accordingly
+    - Use the matching localized LaTeX template
+    Otherwise, use the default English template.
     """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    filled_spec = generate_letter(candidate, job, spec)
-
+    # Step 1 – handle missing closing
     if not filled_spec.closing.strip():
         print("⚠️ Closing is missing, using candidate name instead.")
         filled_spec.closing = f"Sincerely yours,\n{candidate.name}"
 
+    # Step 2 – default template
+    template_name = "cover_template.tex.j2"
+
+    # Step 3 – if multilingual rendering is requested
+    if fit_ad_language:
+        detected_language = job.language
+        print(f"🌐 Original job ad language: {detected_language}")
+
+        if detected_language == "french":
+            filled_spec.translate_to_french()
+            template_name = "cover_template_fr.tex.j2"
+        elif detected_language == "german":
+            filled_spec.translate_to_german()
+            template_name = "cover_template_de.tex.j2"
+        elif detected_language == "english":
+            pass  # already in English
+        else:
+            print(f"⚠️ Unsupported language: {detected_language}. Falling back to English.")
+
+    # Step 4 – render LaTeX template
     env = Environment(loader=FileSystemLoader("templates"))
-    template = env.get_template("cover_template.tex.j2")
+    template = env.get_template(template_name)
 
     tex_output = template.render(
         name=candidate.name,
@@ -97,10 +124,11 @@ def render_cover_letter_tex(
         introduction=filled_spec.introduction.strip(),
         body=filled_spec.body.strip(),
         closing=filled_spec.closing.strip(),
-        size=spec.size,
-        font=spec.font
+        size=filled_spec.size,
+        font=filled_spec.font
     )
 
+    # Step 5 – write to .tex file
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(tex_output)
 
