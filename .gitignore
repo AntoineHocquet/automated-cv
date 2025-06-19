@@ -27,7 +27,7 @@ __pycache__/
 .vscode/
 
 # Local data
-data/profiles/antoine.json
+data/profiles/*.json
 data/letters/*
 output/ada_letter.tex
 output/dummy*
