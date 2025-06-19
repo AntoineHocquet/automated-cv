@@ -27,11 +27,16 @@ __pycache__/
 .vscode/
 
 # Local data
-data/profiles/params.json
+# data/profiles/params.json
+# data/letters/*
+
+
 
 # Output files
-output/cover_letters/*.pdf
-output/cover_letters/*.tex
+#output/cover_letters/*.pdf
+# output/cover_letters/*.tex
+# output/cover_letters/*.log
+# output/cover_letters/*.aux
 
 # OS metadata
 .DS_Store

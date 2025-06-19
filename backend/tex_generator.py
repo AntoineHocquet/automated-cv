@@ -11,12 +11,40 @@ from langchain_core.outputs import Generation
 
 
 
+import re
+import json
+
 def sanitize_output_text(json_text: str) -> str:
     """
-    Sanitize malformed JSON text from LLM output, especially field names with escaped characters.
-    Example: 'raw\\_text' → 'raw_text'
+    Cleans LLM JSON output to make it parseable:
+    - Removes explanations before/after JSON.
+    - Fixes common JSON issues (bad quotes, newlines, trailing commas, etc.).
+    Examples:
+    - 'raw\\_text' -> 'raw_text'
+    - '```json\n{"key": "value"}\n```' -> '{"key": "value"}'
+    - etc.
     """
-    return re.sub(r'\\_', '_', json_text)
+    # 1. Remove Markdown code blocks (e.g. ```json ... ```)
+    json_text = re.sub(r"```(?:json)?\n?(.*)```", r"\1", json_text, flags=re.DOTALL)
+
+    # 2. Remove leading/trailing non-JSON text (try to extract the first {...})
+    match = re.search(r"({.*})", json_text, re.DOTALL)
+    if match:
+        json_text = match.group(1)
+
+    # 3. Replace escaped underscores and fix multiline strings
+    json_text = json_text.replace("\\_", "_")
+    json_text = json_text.replace('\\"', '"')  # fix double escaped quotes
+    json_text = json_text.replace('\\n', '\n')  # interpret literal newlines
+
+    # 4. Replace single quotes with double quotes (if entire doc uses them)
+    if json_text.count("'") > json_text.count('"'):
+        json_text = re.sub(r"'", r'"', json_text)
+
+    # 5. Remove trailing commas before } or ]
+    json_text = re.sub(r",\s*([\]}])", r"\1", json_text)
+
+    return json_text
 
 
 def generate_letter(candidate: Candidate, job: Job, spec: LetterSpec) -> LetterSpec:

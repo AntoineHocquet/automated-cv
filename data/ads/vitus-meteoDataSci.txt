@@ -1,0 +1,99 @@
+
+Vitus Commodities logo
+Vitus Commodities
+Meteorological Data Scientist 
+Berlin, Germany · 17 hours ago · Over 100 applicants
+
+Promoted by hirer · No response insights available yet
+Stand out to the employer by marking this job as a top choice when you apply. Learn more
+Your AI-powered job assessment
+
+About the job
+
+Vitus Commodities actively trades electricity and natural gas contracts in global markets. We are seeking a Meteorological Data Scientist / Quantitative Analyst to join our computational meteorology team to support energy trading operations.
+
+
+Job Description
+
+As a Meteorological Data Scientist / Quantitative Analyst, you will develop and maintain robust analytical models, transforming large-scale meteorological data into actionable insights for renewable energy forecasting and market strategy. This is a collaborative, fast-paced environment at the intersection of data science, meteorology, and energy markets.
+
+
+Key Responsibilities
+
+    Develop and maintain statistical and machine learning models for energy forecasting and market analysis
+    Build and optimize ETL pipelines for meteorological data ingestion, feature engineering, and storage
+    Transform large and diverse datasets into actionable business insights
+    Monitor, evaluate, and improve model performance and data reliability
+    Design and write highly efficient, optimized code with a focus on minimizing latency and maximizing computational performance
+    Contribute to the automation and reliability of our data and modeling infrastructure
+    Collaborate effectively within a technical team and support innovation in analytics and modeling
+
+
+Qualifications
+
+    Experience with end-to-end data pipelines: data ingestion, preprocessing, feature engineering, modeling, and outputting to storage (e.g., Parquet, databases).
+    Demonstrated skill in developing and maintaining statistical or machine learning models (forecasting, regression, classification).
+    Strong data wrangling and automation abilities
+    Proven experience designing efficient, high-performance code for low-latency applications
+    Effective communication skills and a collaborative, solution-oriented mindset
+    Strong proficiency in R (tidyverse, data.table, modeling packages), and experience with meteorological data formats (GRIB, NetCDF) is highly preferred
+    Experience with Python (pandas, xarray, pygrib, cfgrib) is advantageous
+    Background in meteorology, climate science, or spatial data analysis is a plus
+    Familiarity with energy market or trading data is a plus
+
+See how you compare to other applicants
+Applicants for this job
+
+    120Applicants 120Applicants in the past day 
+
+Applicant seniority level
+
+    54% Entry level applicants
+
+    30% Senior level applicants
+
+    1% Director level applicants
+
+    1% Manager level applicants
+
+Applicant education level
+
+    16% have a Doctor of Philosophy (Similar to you) 68% have a Master's Degree 8% have a Master of Business Administration 8% have other degrees 
+
+Exclusive Job Seeker Insights about Vitus Commodities
+The latest hiring trend
+
+    31
+
+    Total employees
+
+    0%
+
+    Company-wide
+
+    2 year growth
+    No change
+
+    0%
+
+    Research
+
+    2 year growth
+    No change
+
+Chart
+Chart with 25 data points.
+The chart has 1 X axis displaying Time. Range: 2022-10-24 18:48:00 to 2025-07-07 15:12:00.
+The chart has 1 Y axis displaying values. Range: 0 to 40.
+End of interactive chart.
+Median employee tenure ‧ 
+1.6 years
+Show more Premium insights
+About the company
+Vitus Commodities company logo
+Vitus Commodities
+6,007 followers
+Oil and Gas 11-50 employees 31 on LinkedIn
+
+Vitus Commodities trades energy in Europe. We are a proprietary risk taking organization engaging in arbitrage opportunities in cross-border energy trading, market-making activities and asset-optimization trading strategies.
+

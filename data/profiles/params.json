@@ -1,95 +1,31 @@
 {
-  "name": "Antoine Hocquet",
+  "name": "John Doe",
   "personal_data": {
-    "email": "antoine.hocquet86@gmail.com",
-    "phone": "+49 176 20557741",
-    "address": "Hussitenstrasse 68, 13355 Berlin, Germany"
+    "email": "john.doe@example.com",
+    "phone": "+49 123 456789",
+    "address": "3 Main St, Houston, TX"
   },
   "hard_skills": [
-    "Python",
-    "R",
-    "SQL",
-    "C++",
-    "Ocaml",
-    "Bash",
-    "MATLAB",
-    "Scilab",
-    "Maple",
-    "FreeFem++",
-    "Finite Element Methods",
-    "Numerical PDEs",
-    "Optimization",
-    "Scientific Simulations",
-    "Regression",
-    "Hypothesis Testing",
-    "Time Series",
-    "Probability Theory",
-    "Supervised Learning",
-    "Unsupervised Learning",
-    "Classification",
-    "Clustering",
-    "Feature Engineering",
-    "PyTorch",
-    "TensorFlow",
-    "Keras",
-    "pandas",
-    "NumPy",
-    "SciPy",
-    "Matplotlib",
-    "Seaborn",
-    "ggplot2",
-    "plotly",
-    "Dash",
-    "Folium",
-    "Git",
-    "GitHub",
-    "GitLab",
-    "Linux (Ubuntu)",
-    "Windows",
-    "LaTeX",
-    "BeautifulSoup",
-    "GitHub Actions",
-    "Docker",
-    "GitHub Codespaces",
-    "Rust",
-    "VS Code",
-    "Google Colab",
-    "LangChain"
+    "Python (specialist)",
+    "SQL (proficient)",
+    "C++ (basics)",
+    "Supervised/Unsupervised Learning (good knowledge)"
   ],
   "soft_skills": [
-    "Science Communication",
-    "Public Speaking",
-    "Teaching",
-    "Mentoring",
     "Analytical Thinking",
-    "Problem-Solving",
-    "Perseverance",
-    "Adaptability",
-    "Organizing Scientific Events",
-    "Interdisciplinary Collaboration",
-    "Effective Presentation",
-    "Attention to Detail"
+    "Strong work ethic"
   ],
   "portfolio_links": [
-    "https://antoinehocquet.com",
-    "https://github.com/AntoineHocquet",
-    "https://www.linkedin.com/in/antoine-hocquet-875231a7",
-    "https://github.com/AntoineHocquet/spaceY",
-    "https://github.com/AntoineHocquet/llg",
-    "https://github.com/AntoineHocquet/automated-cv",
-    "https://github.com/AntoineHocquet/RecSysEcho",
-    "https://github.com/AntoineHocquet/fhn"
+    "https://github.com/johndoe",
+    "https://www.linkedin.com/in/johndoe"
   ],
   "education": [
-    "PhD in natural Sciences in 2024;",
-    "I learned to read Chinese in 2025"
+    "Data Science Msc, University of Houston, 2022",
+    "BSc in Physics, University of Maryland, 2019"
   ],
   "languages_spoken": [
-    "French (native)",
-    "English (fluent)",
-    "German (B2 - conversational)",
-    "Spanish (C1)",
-    "Italian (c2)"
+    "English (native)",
+    "Spanish (B2)"
   ],
-  "miscellaneous": "Married, 3 children. Passionate about astrophysics, theoretical physics, and quantum mechanics. Enjoys night sky observation with a personal telescope, playing guitar and piano, football, and cooking."
+  "miscellaneous": "Maried, 3 children. Passionate about Basketball."
 }

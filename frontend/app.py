@@ -130,24 +130,28 @@ st.header("\U0001F4E4 Upload New Job Ad (.txt)")
 uploaded_file = st.file_uploader("Upload a job description (.txt)", type=["txt"])
 
 if uploaded_file:
-    ads_path = "ads"
+    ads_path = "data/ads"
     os.makedirs(ads_path, exist_ok=True)
     save_path = os.path.join(ads_path, uploaded_file.name)
     with open(save_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
-    st.success(f"✅ File '{uploaded_file.name}' uploaded to ads/ folder.")
+    st.success(f"✅ File '{uploaded_file.name}' uploaded to data/ads/ folder.")
     st.session_state.preview_ready = False  # Reset preview when a new file is uploaded
 
 # --- Generate Cover Letter ---
 st.divider()
 st.header("\U0001F4C4 Generate Cover Letter")
 
-raw_job_files = sorted([f for f in glob.glob("ads/*.txt") if os.path.isfile(f)])
+raw_job_files = sorted([f for f in glob.glob("data/ads/*.txt") if os.path.isfile(f)])
 raw_job_file = st.selectbox("Select a job ad", raw_job_files)
 
+# --- Generate Preview Button ---    
 if st.button("\U0001F680 Generate Preview", type="primary"):
+    job_key = to_snakecase(os.path.basename(raw_job_file).replace(".txt", ""))
     st.session_state.preview_ready = True
-
+    st.session_state.pop(f"filled_job_{job_key}", None)  # Force regenerate for this specific ad
+    st.session_state.pop(f"filled_spec_{job_key}", None)
+    
 # --- Main logic ---
 if st.session_state.get("preview_ready", False):
     if raw_job_file:
@@ -158,10 +162,11 @@ if st.session_state.get("preview_ready", False):
         if job.language in ["french", "german"]:
             st.info(f"✅ Job ad was detected as {job.language} and translated to English for internal processing.")
 
-        # Store filled_job in st.session_state to avoid recomputing
-        if "filled_job" not in st.session_state:
-            st.session_state.filled_job = Job.populate_from_llm(raw_text=job.raw_text)
-        filled_job = st.session_state.filled_job
+        # Store filled_job (with sepcific job_key) in st.session_state to avoid recomputing
+        job_key = to_snakecase(os.path.basename(raw_job_file).replace(".txt", ""))
+        if f"filled_job_{job_key}" not in st.session_state:
+            st.session_state[f"filled_job_{job_key}"] = Job.populate_from_llm(raw_text=job.raw_text)
+        filled_job = st.session_state[f"filled_job_{job_key}"]
 
         st.header("\U0001F4DD Job Ad LLM Preprocessing:")
         filled_job.language = job.language
@@ -181,9 +186,9 @@ if st.session_state.get("preview_ready", False):
             json.dump(filled_job.model_dump(), jf, indent=2)
 
         #  Generate filled_spec and persist it in st.session_state after it’s created once.
-        if "filled_spec" not in st.session_state:
-            st.session_state.filled_spec = generate_letter(candidate, filled_job, spec)
-        filled_spec = st.session_state.filled_spec
+        if f"filled_spec_{job_key}" not in st.session_state:
+            st.session_state[f"filled_spec_{job_key}"] = generate_letter(candidate, filled_job, spec)
+        filled_spec = st.session_state[f"filled_spec_{job_key}"]
 
 
         with open(os.path.join("data/letters", spec_filename), "w", encoding="utf-8") as sf:
@@ -199,7 +204,7 @@ if st.session_state.get("preview_ready", False):
         # --- Post-preview font and size customization ---
         st.markdown("### \U0001F4DD Customize LaTeX Output")
         size = st.selectbox("Font size", ["9pt", "10pt", "11pt", "12pt"], index=3, key="font_size")
-        scale = st.slider("Scale", min_value=0.4, max_value=0.9, value=0.75, step=0.01, key="font_scale")
+        scale = st.slider("Scale", min_value=0.3, max_value=1.0, value=0.75, step=0.01, key="font_scale")
         font = st.selectbox("Font family", ["default", "times", "fourier", "euler"], index=0, key="font_family")
 
         # --- Post-preview language customization ---
